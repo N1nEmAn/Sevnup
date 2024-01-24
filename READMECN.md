@@ -1,12 +1,12 @@
-# Sevnup MIPS Firmware Analysis Script
+# Sevnup MIPS 固件分析脚本
 
-## Introduction
+## 介绍
 
-Welcome to my script, designed specifically for Arch Linux. Other tools were not fully functional on this system, which was quite frustrating.
+欢迎使用我这个脚本，写这个脚本是专门为archlinux设计的，因为其他的工具我在这个系统无法完全使用，这让我非常难受。
 
-This is officially my first time uploading my tool to GitHub. I hope you all give it a star, and feel free to raise any issues!
+算是我正式第一次在github上传自己的工具吧，希望大家点亮star，如果有什么问题敬请提出！
 
-from 2024.1.24 N1nEmAn
+来自2024.1.24 N1nEmAn
 
 ```
    ███████╗███████╗██╗   ██╗███╗   ██╗██╗   ██╗██████╗ 
@@ -17,13 +17,13 @@ from 2024.1.24 N1nEmAn
    ╚══════╝╚══════╝  ╚═══╝  ╚═╝  ╚═══╝ ╚═════╝ ╚═╝     
 ```
 
-## Features
+## 功能
 
-This tool currently provides simulation of MIPSel firmware file systems. As I delve deeper into IoT security, more features will be developed in the future. Stay tuned!
+本工具目前提供的功能仅限于对mipsel的固件文件系统模拟，后续随着本人对IoT安全的深入学习，会开发更多的功能，敬请期待！
 
-## Dependencies
+## 依赖
 
-Before using this script, make sure you have the following components installed:
+在使用该脚本之前，请确保您已经安装以下组件：
 
 - [QEMU](https://www.qemu.org/)
 
@@ -31,7 +31,7 @@ Before using this script, make sure you have the following components installed:
   yay -S qemu-user-static
   ```
 
-- [tunctl](https://tunctl.sourceforge.net/) (from the `uml_utilities` package)
+- [tunctl](https://tunctl.sourceforge.net/) (从 `uml_utilities` 包中获取)
 
   ```bash
   yay -S uml_utilities
@@ -43,19 +43,19 @@ Before using this script, make sure you have the following components installed:
   sudo pacman -S python
   ```
 
-## Usage
+## 使用方法
 
-1. Clone the repository:
+1. 克隆存储库：
 
    ```bash
    git clone https://github.com/N1nEmAn/Sevnup.git
    cd Sevnup
    ```
 
-2. Run the script with the path to the squashfs-root as an argument:
+2. 运行脚本并传递 squashfs-root 的路径作为参数：
 
    ```bash
    ./sevnup.sh /path/to/squashfs-root
    ```
 
-3. Follow the instructions provided by the script.
+3. 按照脚本提供的说明进行操作即可。
