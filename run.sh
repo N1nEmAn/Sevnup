@@ -13,8 +13,13 @@ echo "     Welcome to Sevnup firmware analysis script for MIPS "
 echo "   By N1nEmAn - https://github.com/N1nEmAn/Sevnup"
 echo "                                                    "
 
+#initial log file
+mkdir -p log
 qemu_log="./log/qemu.log"
 tar_log="./log/tar.log"
+touch ./log/qemu.log
+touch ./log/tar.log
+touch ./log/http.log
 
 # Check if vmlinux-3.2.0-4-4kc-malta and debian_wheezy_mipsel_standard exists
 echo "                                                    "
