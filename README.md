@@ -1,4 +1,4 @@
-# Sevnup MIPSel Firmware Analysis Script
+# Sevnup MIPSel Firmware Simulation Tool
 
 ## Introduction
 
