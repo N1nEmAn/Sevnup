@@ -55,6 +55,7 @@
 2. 运行脚本并传递 squashfs-root 的路径作为参数：
 
    ```bash
+   #第一次运行会下载镜像。
    ./sevnup.sh /path/to/squashfs-root
    ```
 

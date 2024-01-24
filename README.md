@@ -55,7 +55,8 @@ Before using this script, make sure you have the following components installed:
 2. Run the script with the path to the squashfs-root as an argument:
 
    ```bash
-   ./sevnup.sh /path/to/squashfs-root
+  #At first it will download images
+   ./run.sh /path/to/squashfs-root
    ```
 
 3. Follow the instructions provided by the script.
