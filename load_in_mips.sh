@@ -10,7 +10,7 @@ echo "     ███████║███████╗ ╚████╔�
 echo "     ╚══════╝╚══════╝  ╚═══╝  ╚═╝  ╚═══╝ ╚═════╝ ╚═╝     "
 echo "                                                    "
 echo "     Welcome to Sevnup firmware analysis script for MIPS "
-echo "   By N1nEmAn - https://github.com/liyansong2018/firmware-analysis-plus"
+echo "   By N1nEmAn - https://github.com/N1nEmAn/Sevnup"
 echo "                                                    "
 echo "[o] loading the firmware into a chroot environment..."
 
