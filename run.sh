@@ -9,7 +9,7 @@ echo "     ╚════██║██╔══╝  ╚██╗ ██╔╝
 echo "     ███████║███████╗ ╚████╔╝ ██║ ╚████║╚██████╔╝██║     "
 echo "     ╚══════╝╚══════╝  ╚═══╝  ╚═╝  ╚═══╝ ╚═════╝ ╚═╝     "
 echo "                                                    "
-echo "     Welcome to Sevnup firmware analysis script for MIPS "
+echo "     Welcome to Sevnup firmware analysis script for MIPSel "
 echo "   By N1nEmAn - https://github.com/N1nEmAn/Sevnup"
 echo "                                                    "
 

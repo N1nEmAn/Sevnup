@@ -1,4 +1,4 @@
-# Sevnup MIPS 固件分析脚本
+# Sevnup MIPSel 固件分析脚本
 
 ## 介绍
 

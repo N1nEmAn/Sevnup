@@ -1,4 +1,4 @@
-# Sevnup MIPS Firmware Analysis Script
+# Sevnup MIPSel Firmware Analysis Script
 
 ## Introduction
 
