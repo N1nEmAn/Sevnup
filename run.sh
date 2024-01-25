@@ -42,7 +42,7 @@ else
 fi
 echo "                                                    "
 
-#config ip address for tap0 and http server for download squashfs-root.tar.gz
+#config ip address for br0 and http server for download squashfs-root.tar.gz
 echo "                                                    "
 echo "===============config ip address====================="
 echo "                                                    "
@@ -58,11 +58,11 @@ if [ ! -d "$squashfs_root_path" ]; then
 	exit 1
 fi
 
-echo -e "[o] config ip address for tap0 and http server..."
-sudo tunctl -t tap0 -u $(whoami)
-sudo ip addr add 10.10.10.1/24 dev tap0
-sudo ip link set dev tap0 up
-ip addr show tap0
+echo -e "[o] config ip address for br0 and http server..."
+sudo tunctl -t br0 -u $(whoami)
+sudo ip addr add 10.10.10.1/24 dev br0
+sudo ip link set dev br0 up
+ip addr show br0
 
 if [ -f "$squashfs_root_path/../squashfs-root.tar.gz" ]; then
 	echo -e "\033[0;32m[+]\033[0m squashfs-root.tar.gz already exists. Skipping compression."
@@ -99,7 +99,9 @@ sudo chmod +x /etc/qemu-ifup
 
 # Run qemu-system-mipsel with nohup and redirect output to log/output.log
 cp ./load_in_mips.sh "$squashfs_root_path/../"
-sudo nohup qemu-system-mipsel -M malta -kernel ./img/vmlinux-3.2.0-4-4kc-malta -hda ./img/debian_wheezy_mipsel_standard.qcow2 -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 >"$qemu_log" 2>&1 &
+cp ./bridge.sh "$squashfs_root_path/../"
+
+sudo nohup qemu-system-mipsel -M malta -kernel ./img/vmlinux-3.2.0-4-4kc-malta -hda ./img/debian_wheezy_mipsel_standard.qcow2 -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=br0 -s >"$qemu_log" 2>&1 &
 echo -e "\033[0;32m[+]\033[0m now qemu-system-mipsel is running!"
 echo -e "[o] in mipsel, use username 'root' and password 'root' to login."
 echo -e "[o] input:'ifconfig eth0 10.10.10.2/24' to config ip address."

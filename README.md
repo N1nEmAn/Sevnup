@@ -60,3 +60,6 @@ Before using this script, make sure you have the following components installed:
    ```
 
 3. Follow the instructions provided by the script.
+
+
+4. If other steps are completed, you can run test.py to test whether it is successful.
