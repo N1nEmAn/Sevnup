@@ -55,7 +55,7 @@ Before using this script, make sure you have the following components installed:
 2. Run the script with the path to the squashfs-root as an argument:
 
    ```bash
-  #At first it will download images
+    #At first it will download images
    ./run.sh /path/to/squashfs-root
    ```
 
