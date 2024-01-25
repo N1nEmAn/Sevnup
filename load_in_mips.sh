@@ -33,7 +33,6 @@ export LD_LIBRARY_PATH=./lib:$LD_LIBRARY_PATH
 sh bridge.sh
 rm -rf ./squashfs-root/webroot
 rm -rf ./squashfs-root/etc
-mkdir ./squashfs-root/webroot
-mkdir ./squashfs-root/etc
-ln -s ./squashfs-root/webroot_ro/ ./squashfs-root/webroot
+cp -r ./squashfs-root/webroot_ro/ ./squashfs-root/webroot
+cp -r ./squashfs-root/etc_ro/ ./squashfs-root/etc
 chroot squashfs-root sh

@@ -75,6 +75,8 @@ fi
 # kill the process which is using port 8000 and set up http
 echo -e "[o] kill the process which is using port 8000 and setup http..."
 sudo fuser -k 8000/tcp
+sudo fuser -k 8000/tcp
+sudo fuser -k 8000/tcp
 nohup python3 -m http.server -d "$squashfs_root_path/../" >./log/http.log 2>&1 &
 echo "                                                    "
 

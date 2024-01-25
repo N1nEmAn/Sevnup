@@ -63,3 +63,15 @@ Before using this script, make sure you have the following components installed:
 
 
 4. If other steps are completed, you can run test.py to test whether it is successful.
+
+5.use`gdb-multiarch`to debug,command as follow:
+```sh
+#if not install,install first
+yay -S gdb-multiarch
+#run as follow
+gdb-multiarch
+#then run as follow to debug kernel
+target remote :1234
+file {here fill in the location of the two kernels} {here fill in the location of the program you need to debug(if any)}
+```
+if you need to debug the program running in the virtual machine, you need to break at the address inside the program, and then break at the function name, and continue over. This is the operation of gdb, so I won't go into details.
