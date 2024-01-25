@@ -29,4 +29,5 @@ fi
 mount -t proc /proc/ ./squashfs-root/proc/
 mount -o bind /dev/ ./squashfs-root/dev/
 chroot squashfs-root sh
+#change lib path
 export LD_LIBRARY_PATH=./lib:$LD_LIBRARY_PATH
