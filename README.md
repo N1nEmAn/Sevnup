@@ -86,6 +86,7 @@ Before using this script, make sure you have the following components installed:
    if you need to debug the program running in the virtual machine, you need to break at the address inside the program, and then break at the function name, and continue over. This is the operation of gdb, so I won't go into details.
 ## Example
 Here is a simple example provided for everyone's reference and convenience of use.
+- Quick tip: In the QEMU window, you can use Ctrl + Alt + + to zoom in the window.
 
 ![image](https://github.com/GitHubDaily/GitHubDaily/assets/118088443/70b29624-d56b-459f-aa69-0d1b7a55aeb6)
 ![image](https://github.com/GitHubDaily/GitHubDaily/assets/118088443/dfc52097-8e94-48a2-834e-6eeedef28c34)
