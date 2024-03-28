@@ -84,6 +84,7 @@
    ```
 ## 例子
 这里提供一个例子，方便大家参考和使用。
+- 小tips：在qemu窗口使用`ctrl+alt+ +`可以放大窗口。
 ![image](https://github.com/GitHubDaily/GitHubDaily/assets/118088443/70b29624-d56b-459f-aa69-0d1b7a55aeb6)
 ![image](https://github.com/GitHubDaily/GitHubDaily/assets/118088443/dfc52097-8e94-48a2-834e-6eeedef28c34)
 ![image](https://github.com/GitHubDaily/GitHubDaily/assets/118088443/0cf45988-7840-4657-a531-a5dd74d3f71c)
