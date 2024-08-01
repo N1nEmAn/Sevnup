@@ -1,12 +1,20 @@
-# Sevnup MIPSel Firmware Simulation Tool
+# Sevnup MIPSel Firmware Emulation Script
+
+## Highlight
+
+- ⚙️ **Easy Configuration:** FirmA allows you to configure and start directly from the QEMU layer without manual operations.
+- 🔧 **High Customization:** Enjoy a high degree of customization, making it adaptable to a wide range of firmware.
+- 🖥️ **Arch Linux Base:** This open-source project is based on Arch Linux, offering a solid foundation.
+- 🌍 **Community Contributions:** Contributions for other system versions are welcome and encouraged.
+- 🎉 **IoTSec FoR FUN:** Dive into IoT security with enjoyment and learning!
 
 ## Introduction
 
-Welcome to my script, designed specifically for Arch Linux. Other tools were not fully functional on this system, which was quite frustrating.
+Welcome to my script! This script is specifically designed for Arch Linux because other tools do not work fully on this system, which frustrates me a lot.
 
-This is officially my first time uploading my tool to GitHub. I hope you all give it a star, and feel free to raise any issues!
+This is my official first tool uploaded to GitHub. I hope you will star it, and if you have any questions, feel free to raise them!
 
-from 2024.1.24 N1nEmAn
+From January 24, 2024, N1nEmAn
 
 ```
    ███████╗███████╗██╗   ██╗███╗   ██╗██╗   ██╗██████╗ 
@@ -19,11 +27,13 @@ from 2024.1.24 N1nEmAn
 
 ## Features
 
-This tool currently provides simulation of MIPSel firmware file systems. As I delve deeper into IoT security, more features will be developed in the future. Stay tuned!
+Currently, this tool only provides emulation of the MIPSEL firmware file system. As I delve deeper into IoT security, more features will be developed, so stay tuned!
+
+Update on August 1, 2024: Added support for armel.
 
 ## Dependencies
 
-Before using this script, make sure you have the following components installed:
+Before using this script, please ensure you have installed the following components:
 
 - [QEMU](https://www.qemu.org/)
 
@@ -31,7 +41,7 @@ Before using this script, make sure you have the following components installed:
   yay -S qemu-user-static
   ```
 
-- [tunctl](https://tunctl.sourceforge.net/) (from the `uml_utilities` package)
+- [tunctl](https://tunctl.sourceforge.net/) (available from the `uml_utilities` package)
 
   ```bash
   yay -S uml_utilities
@@ -52,31 +62,27 @@ Before using this script, make sure you have the following components installed:
    cd Sevnup
    ```
 
-2. Run the script with the path to the squashfs-root as an argument:
+2. Run the script and pass the path of the squashfs-root as a parameter:
 
    ```bash
-    #At first it will download images
-   ./run.sh /path/to/squashfs-root
+   # The first run will download the image.
+   ./sevnup.sh armel/mipsel /path/to/squashfs-root
    ```
 
 3. Follow the instructions provided by the script.
 
+4. If other steps are completed, you can run `test.py` to test if it was successful.
 
-4. If other steps are completed, you can run test.py to test whether it is successful.
+5. Use `gdb-multiarch` for debugging with the following commands:
 
-5. use`gdb-multiarch`to debug,command as follow:
+   If you need to debug a program running inside the virtual machine, set breakpoints at the program's internal addresses, then set breakpoints at the function names and continue. This is about GDB operations, so I won't go into detail.
 
    ```sh
-   #if not install,install first
+   # Install if not already installed
    yay -S gdb-multiarch
-   #run as follow
+   # Run the following
    gdb-multiarch
-   #then run as follow to debug kernel
+   # Then run the following internally to debug the kernel
    target remote :1234
-   file {here fill in the location of the two kernels} {here fill in the location of the program you need to debug(if any)}
+   file {fill in the location of the two kernels here} {fill in the location of the program you want to debug (if any)}
    ```
-
-   
-
-   if you need to debug the program running in the virtual machine, you need to break at the address inside the program, and then break at the function name, and continue over. This is the operation of gdb, so I won't go into details.
-
