@@ -20,9 +20,11 @@ wget http://10.10.10.1:8000/bridge.sh
 
 #extract the squashfs-root
 mkdir -p log
+mkdir -p ./temp_extracted
 tar -zxvf squashfs-root.tar.gz -C ./temp_extracted >/dev/null 2>>./log/tar.log
 rm -rf ./squashfs-root
-mv ./temp_extracted ./squashfs-root
+mv ./temp_extracted/* ./squashfs-root
+rm -rf ./temp_extracted
 
 #chroot into the firmware
 mount -t proc /proc/ ./squashfs-root/proc/

@@ -143,6 +143,7 @@ sudo chmod +x /etc/qemu-ifup
 
 # Run qemu-system with nohup and redirect output to log/output.log
 cp ./load_in_mips.sh "$squashfs_root_path/../"
+cp ./bridge.sh "$squashfs_root_path/../"
 
 if [ "$arch" == "armel" ]; then
   sudo nohup qemu-system-arm -M versatilepb -kernel ./img/vmlinuz-3.2.0-4-versatile -initrd ./img/initrd.img-3.2.0-4-versatile -hda ./img/debian_wheezy_armel_standard.qcow2 -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 -s >"$qemu_log" 2>&1 &
