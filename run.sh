@@ -48,7 +48,8 @@ if [ ! -d "$squashfs_root_path" ]; then
   echo -e "\033[0;31m[x]\033[0m The provided path is not a directory."
   print_help
 fi
-
+sudo chmod 777 "$squashfs_root_path/lib/*"
+sudo chmod 777 "$squashfs_root_path/bin/*"
 # Initial log file
 mkdir -p log
 qemu_log="./log/qemu.log"
