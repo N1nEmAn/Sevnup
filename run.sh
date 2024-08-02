@@ -50,6 +50,8 @@ if [ ! -d "$squashfs_root_path" ]; then
 fi
 sudo chmod 777 "$squashfs_root_path/lib/*"
 sudo chmod 777 "$squashfs_root_path/bin/*"
+sudo chmod 777 "$squashfs_root_path/usr/lib/*"
+sudo chmod 777 "$squashfs_root_path/usr/bin/*"
 # Initial log file
 mkdir -p log
 qemu_log="./log/qemu.log"
