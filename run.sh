@@ -148,18 +148,13 @@ if [ "$arch" == "armel" ]; then
   sudo nohup qemu-system-arm -M versatilepb -kernel ./img/vmlinuz-3.2.0-4-versatile -initrd ./img/initrd.img-3.2.0-4-versatile -hda ./img/debian_wheezy_armel_standard.qcow2 -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 -s >"$qemu_log" 2>&1 &
   echo -e "\033[0;32m[+]\033[0m now qemu-system-${arch} is running!"
   echo -e "[o] in ${arch}, use username 'root' and password 'root' to login."
-  echo -e "[o] input:'ifconfig eth0 10.10.10.2/24' to config ip address."
-  echo -e "[o] input:'ping 10.10.10.1' to test if the connection is successful."
-  echo -e "[o] input:'wget http://10.10.10.1:8000/squashfs-root.tar.gz' to download the rootfs."
-  echo -e "[o] after downloading, use 'tar -xzvf squashfs-root.tar.gz' to extract."
-  echo " "
 else
   sudo nohup qemu-system-mipsel -M malta -kernel ./img/vmlinux-3.2.0-4-4kc-malta -hda ./img/debian_wheezy_mipsel_standard.qcow2 -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 -s >"$qemu_log" 2>&1 &
   echo -e "\033[0;32m[+]\033[0m now qemu-system-${arch} is running!"
   echo -e "[o] in ${arch}, use username 'root' and password 'root' to login."
-  echo -e "[o] input:'ifconfig eth0 10.10.10.2/24' to config ip address."
-  echo -e "[o] input:'ping 10.10.10.1' to test if the connection is successful."
-  echo -e "[o] input:'wget http://10.10.10.1:8000/squashfs-root.tar.gz' to download the rootfs."
-  echo -e "[o] after downloading, use 'tar -xzvf squashfs-root.tar.gz' to extract."
-  echo " "
 fi
+echo -e "[o] input:'ifconfig eth0 10.10.10.2/24' to config ip address."
+echo -e "[o] input:'ping 10.10.10.1' to test if the connection is successful."
+echo -e "[o] input:'wget http://10.10.10.1:8000/load_in_mips.sh' to download script."
+echo -e "[o] input:'sh load_in_mips.sh' to finish all the work."
+echo "                                                    "

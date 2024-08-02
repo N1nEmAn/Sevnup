@@ -19,12 +19,10 @@ wget http://10.10.10.1:8000/squashfs-root.tar.gz
 wget http://10.10.10.1:8000/bridge.sh
 
 #extract the squashfs-root
-if [ -d "squashfs-root" ]; then
-  echo "Folder 'squashfs-root' already exists. Skipping extraction."
-else
-  mkdir -p log
-  tar -zxvf squashfs-root.tar.gz -C ./ >/dev/null 2>>./log/tar.log
-fi
+mkdir -p log
+tar -zxvf squashfs-root.tar.gz -C ./temp_extracted >/dev/null 2>>./log/tar.log
+rm -rf ./squashfs-root
+mv ./temp_extracted ./squashfs-root
 
 #chroot into the firmware
 mount -t proc /proc/ ./squashfs-root/proc/
