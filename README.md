@@ -4,7 +4,7 @@
 
 - ⚙️ **Easy Configuration:** FirmA allows you to configure and start directly from the QEMU layer without manual operations.
 - 🔧 **High Customization:** Enjoy a high degree of customization, making it adaptable to a wide range of firmware.
-- 🖥️ **Arch Linux Base:** This open-source project is based on Arch Linux, offering a solid foundation.
+- 🖥️ **Arch Linux Base:** This open-source project is based on Arch Linux, offering a solid foundation.But it can also be used in other Linux.
 - 🌍 **Community Contributions:** Contributions for other system versions are welcome and encouraged.
 - 🎉 **IoTSec FoR FUN:** Dive into IoT security with enjoyment and learning!
 
