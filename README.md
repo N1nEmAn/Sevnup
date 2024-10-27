@@ -30,7 +30,7 @@ From January 24, 2024, N1nEmAn
 Currently, this tool only provides emulation of the MIPSEL firmware file system. As I delve deeper into IoT security, more features will be developed, so stay tuned!
 
 Update on August 1, 2024: Added support for armel.
-Update on Oct 27, 2024: Added support for armel for vexpress.
+Update on Oct 27, 2024: Added support for armhf.
 
 ## Dependencies
 
