@@ -1,4 +1,4 @@
-# Sevnup MIPSel 固件模拟脚本
+# Sevnup 固件模拟脚本
 
 ## 亮点
 
