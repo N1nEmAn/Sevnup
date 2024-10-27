@@ -19,8 +19,8 @@ print_help() {
   echo
   echo "ARCHITECTURE:"
   echo "  mipsel   - MIPS architecture"
-  echo "  armel    - ARM architecture"
-  echo "  armhf   - ARM architecture for vexpress"
+  echo "  armel    - ARMel architecture"
+  echo "  armhf   - ARMhf architecture for vexpress"
   echo
   echo "ROOT_PATH:"
   echo "  The path to the root directory of the squashfs-root."
