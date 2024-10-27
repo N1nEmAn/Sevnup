@@ -1,4 +1,4 @@
-# Sevnup MIPSel Firmware Emulation Script
+# Sevnup Firmware Emulation Script
 
 ## Highlight
 
