@@ -182,12 +182,12 @@ elif [ "$arch" == "armhf" ]; then
   sudo qemu-system-arm -M vexpress-a9 -nographic \
     -kernel ./img/vmlinuz-3.2.0-4-vexpress \
     -initrd ./img/initrd.img-3.2.0-4-vexpress \
-    -drive if=sd,file=./img/debian_wheezy_armhf_standard.qcow2 \
+    -drive if=sd,file=./img/root.img \
     -append "root=/dev/mmcblk0p2 console=tty0" -net nic -net tap,ifname=tap0 -s
+  # -drive if=sd,file=./img/debian_wheezy_armhf_standard.qcow2 \
 else
-  sudo nohup qemu-system-mipsel -M malta \
+  sudo qemu-system-mipsel -M malta \
     -kernel ./img/vmlinux-3.2.0-4-4kc-malta \
     -hda ./img/debian_wheezy_mipsel_standard.qcow2 \
-    -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 -s \
-    >"$qemu_log" 2>&1 &
+    -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 -s -nographic
 fi
