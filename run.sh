@@ -123,6 +123,7 @@ folder_name=$(basename "$squashfs_root_path")
 # Config ip address for tap0 and http server for download squashfs-root.tar.gz
 echo -e "[o] config ip address for tap0 and http server..."
 sudo tunctl -t tap0 -u $(whoami)
+sudo ip tuntap add mode tap user $(whoami) name tap0
 sudo ip addr add 10.10.10.1/24 dev tap0
 sudo ip link set dev tap0 up
 ip addr show tap0
