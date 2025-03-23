@@ -31,6 +31,7 @@ Currently, this tool only provides emulation of the MIPSEL firmware file system.
 
 Update on August 1, 2024: Added support for armel.
 Update on Oct 27, 2024: Added support for armhf.
+Update on March 23, 2025: Added support for mips.
 
 ## Dependencies
 
