@@ -18,15 +18,16 @@ print_help() {
   echo "Usage: $0 [ARCHITECTURE] [ROOT_PATH]"
   echo
   echo "ARCHITECTURE:"
-  echo "  mipsel   - MIPS architecture"
+  echo "  mipsel   - MIPS Little Endian architecture"
+  echo "  mips     - MIPS Big Endian architecture"
   echo "  armel    - ARMel architecture"
-  echo "  armhf   - ARMhf architecture for vexpress"
+  echo "  armhf    - ARMhf architecture for vexpress"
   echo
   echo "ROOT_PATH:"
   echo "  The path to the root directory of the squashfs-root."
   echo
   echo "Example:"
-  echo "  $0 armel /path/to/squashfs-root"
+  echo "  $0 mips /path/to/squashfs-root"
   exit 1
 }
 
@@ -38,11 +39,10 @@ fi
 
 # Check for architecture argument
 arch="$1"
-if [ "$arch" != "mipsel" ] && [ "$arch" != "armel" ] && [ "$arch" != "armhf" ]; then
+if [ "$arch" != "mipsel" ] && [ "$arch" != "mips" ] && [ "$arch" != "armel" ] && [ "$arch" != "armhf" ]; then
   echo -e "\033[0;31m[x]\033[0m Unsupported architecture: $arch"
   print_help
 fi
-
 # Check for root path argument
 squashfs_root_path="$2"
 if [ ! -d "$squashfs_root_path" ]; then
@@ -95,7 +95,19 @@ elif [ "$arch" == "armel" ]; then
     wget -P ./img https://people.debian.org/~aurel32/qemu/armel/debian_wheezy_armel_standard.qcow2
     echo "[o] debian_wheezy_armel_standard.qcow2 is downloading..."
   fi
+elif [ "$arch" == "mips" ]; then
+  # Handle MIPS (Big Endian)
+  if [ ! -f ./img/vmlinux-3.2.0-4-4kc-malta ]; then
+    echo -e "\033[0;31m[x]\033[0m vmlinux-3.2.0-4-4kc-malta (big-endian) is missing. Downloading..."
+    wget -P ./img https://people.debian.org/~aurel32/qemu/mips/vmlinux-3.2.0-4-4kc-malta
+    echo "[o] vmlinux-3.2.0-4-4kc-malta (big-endian) is downloading..."
+  fi
 
+  if [ ! -f ./img/debian_wheezy_mips_standard.qcow2 ]; then
+    echo -e "\033[0;31m[x]\033[0m debian_wheezy_mips_standard.qcow2 is missing. Downloading..."
+    wget -P ./img https://people.debian.org/~aurel32/qemu/mips/debian_wheezy_mips_standard.qcow2
+    echo "[o] debian_wheezy_mips_standard.qcow2 is downloading..."
+  fi
 else
   # Handle other architectures (e.g., mipsel)
   if [ -f ./img/vmlinux-3.2.0-4-4kc-malta ]; then
@@ -171,19 +183,23 @@ echo -e "[o] input:'ping 10.10.10.1' to test if the connection is successful."
 echo -e "[o] input:'wget http://10.10.10.1:8000/load_in_mips.sh' to download script."
 echo -e "[o] input:'sh load_in_mips.sh' to finish all the work."
 echo "                                                    "
-if [ "$arch" == "armel" ]; then
+if [ "$arch" == "mips" ]; then
+  sudo qemu-system-mips -M malta \
+    -kernel ./img/vmlinux-3.2.0-4-4kc-malta \
+    -hda ./img/debian_wheezy_mips_standard.qcow2 \
+    -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 -s -nographic
+elif [ "$arch" == "armel" ]; then
   sudo qemu-system-arm -M versatilepb -nographic \
     -kernel ./img/vmlinuz-3.2.0-4-versatile \
     -initrd ./img/initrd.img-3.2.0-4-versatile \
     -hda ./img/debian_wheezy_armel_standard.qcow2 \
     -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 -s
-
 elif [ "$arch" == "armhf" ]; then
   # 启动 qemu-system-arm
   sudo qemu-system-arm -M vexpress-a9 -nographic \
     -kernel ./img/vmlinuz-3.2.0-4-vexpress \
     -initrd ./img/initrd.img-3.2.0-4-vexpress \
-     -drive if=sd,file=./img/debian_wheezy_armhf_standard.qcow2 \
+    -drive if=sd,file=./img/debian_wheezy_armhf_standard.qcow2 \
     -append "root=/dev/mmcblk0p2 console=tty0" -net nic -net tap,ifname=tap0 -s
 else
   sudo qemu-system-mipsel -M malta \
