@@ -1,6 +1,6 @@
 # Sevnup Firmware Emulation Script
 
-![Platform](https://img.shields.io/badge/platform-linux-blueviolet)
+![Platform](https://img.shields.io/badge/platform-Linux-blueviolet)
 ![Forks](https://img.shields.io/github/forks/N1nEmAn/Sevnup)
 ![Stars](https://img.shields.io/github/stars/N1nEmAn/Sevnup)
 ![1](https://github.com/user-attachments/assets/fbf51a08-3b9f-49ac-9321-415b095c629e)
