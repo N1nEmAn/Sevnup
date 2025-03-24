@@ -1,5 +1,5 @@
 # Sevnup Firmware Emulation Script
-![s](https://github.com/user-attachments/assets/6b1d6609-b7b9-46c8-aeec-231e28b9881a)
+![trans_bg](https://github.com/user-attachments/assets/0150ff07-d74f-42a6-bd64-04cffb673bd2)
 
 ## Highlight
 
