@@ -1,9 +1,9 @@
 # Sevnup Firmware Emulation Script
+
+![Platform](https://img.shields.io/badge/platform-linux-blueviolet)
+![Forks](https://img.shields.io/github/forks/N1nEmAn/Sevnup)
+![Stars](https://img.shields.io/github/stars/N1nEmAn/Sevnup)
 ![1](https://github.com/user-attachments/assets/fbf51a08-3b9f-49ac-9321-415b095c629e)
-
-
-## Highlight
-
 - ⚙️ **Easy Configuration:** Sevnup allows you to configure and start directly from the QEMU layer without manual operations.
 - 🔧 **High Customization:** Enjoy a high degree of customization, making it adaptable to a wide range of firmware.
 - 🖥️ **Arch Linux Base:** This open-source project is based on Arch Linux, offering a solid foundation.But it can also be used in other Linux.
