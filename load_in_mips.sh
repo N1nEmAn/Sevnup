@@ -14,6 +14,8 @@ echo "   By N1nEmAn - https://github.com/N1nEmAn/Sevnup"
 echo "                                                    "
 echo "[o] loading the firmware into a chroot environment..."
 
+# if the script has been run before
+ifconfig eth0 10.10.10.2/24
 #download the squashfs-root.tar.gz from the router
 wget http://10.10.10.1:8000/squashfs-root.tar.gz
 wget http://10.10.10.1:8000/bridge.sh
