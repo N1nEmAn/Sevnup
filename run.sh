@@ -97,9 +97,10 @@ elif [ "$arch" == "armel" ]; then
   fi
 elif [ "$arch" == "mips" ]; then
   # Handle MIPS (Big Endian)
-  if [ ! -f ./img/vmlinux-3.2.0-4-4kc-malta ]; then
+  if [ ! -f ./img/vmlinux-3.2.0-4-4kc-malta-be ]; then
     echo -e "\033[0;31m[x]\033[0m vmlinux-3.2.0-4-4kc-malta (big-endian) is missing. Downloading..."
     wget -P ./img https://people.debian.org/~aurel32/qemu/mips/vmlinux-3.2.0-4-4kc-malta
+    mv ./img/vmlinux-3.2.0-4-4kc-malta ./img/vmlinux-3.2.0-4-4kc-malta-be
     echo "[o] vmlinux-3.2.0-4-4kc-malta (big-endian) is downloading..."
   fi
 
@@ -185,7 +186,7 @@ echo -e "[o] input:'sh load_in_mips.sh' to finish all the work."
 echo "                                                    "
 if [ "$arch" == "mips" ]; then
   sudo qemu-system-mips -M malta \
-    -kernel ./img/vmlinux-3.2.0-4-4kc-malta \
+    -kernel ./img/vmlinux-3.2.0-4-4kc-malta-be \
     -hda ./img/debian_wheezy_mips_standard.qcow2 \
     -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 -s -nographic
 elif [ "$arch" == "armel" ]; then
@@ -203,7 +204,6 @@ elif [ "$arch" == "armhf" ]; then
     -append "root=/dev/mmcblk0p2 console=tty0" -net nic -net tap,ifname=tap0 -s
 else
   sudo qemu-system-mipsel -M malta \
-    -kernel ./img/vmlinux-3.2.0-4-4kc-malta \
-    -hda ./img/debian_wheezy_mipsel_standard.qcow2 \
+    -kernel ./img/vmlinux-3.2.0-4-4kc-malta -hda ./img/debian_wheezy_mipsel_standard.qcow2 \
     -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 -s -nographic
 fi
