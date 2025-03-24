@@ -1,6 +1,9 @@
 # Sevnup 固件模拟脚本
 
-## 亮点
+![Platform](https://img.shields.io/badge/platform-linux-blueviolet)
+![Forks](https://img.shields.io/github/forks/N1nEmAn/Sevnup)
+![Stars](https://img.shields.io/github/stars/N1nEmAn/Sevnup)
+![1](https://github.com/user-attachments/assets/fbf51a08-3b9f-49ac-9321-415b095c629e)
 
 ⚙️ **简单配置：** Sevnup 允许您直接从 QEMU 层面进行配置和启动，无需手动操作即可进入文件系统。
 
