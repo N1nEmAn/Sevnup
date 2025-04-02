@@ -1,5 +1,41 @@
 #!/bin/bash
 
+# Set the function to clean up upon exit
+cleanup() {
+  echo -e "\n\033[0;33m[!]\033[0m Cleaning up resources..."
+  # Stop the HTTP server if it's running
+  if pgrep -f "python3 -m http.server" > /dev/null; then
+    echo -e "[o] Stopping HTTP server on port 8000..."
+    sudo fuser -k 8000/tcp 2>/dev/null
+    if pgrep -f "python3 -m http.server" > /dev/null; then
+      echo -e "\033[0;31m[x]\033[0m Failed to stop HTTP server"
+    else
+      echo -e "\033[0;32m[+]\033[0m HTTP server stopped successfully"
+    fi
+  fi
+  # Remove the HTTP log file
+  if [ -f "/etc/qemu-ifup.bak" ]; then
+    echo -e "[o] Restoring original QEMU network script..."
+    sudo mv /etc/qemu-ifup.bak /etc/qemu-ifup
+    echo -e "\033[0;32m[+]\033[0m Original QEMU network script restored"
+  fi
+  
+  # Remove the tap0 network interface
+  if ip link show tap0 &>/dev/null; then
+    echo -e "[o] Removing tap0 network interface..."
+    sudo ip link set tap0 down
+    sudo ip tuntap del mode tap name tap0
+    if ! ip link show tap0 &>/dev/null; then
+      echo -e "\033[0;32m[+]\033[0m tap0 interface removed successfully"
+    else
+      echo -e "\033[0;31m[x]\033[0m Failed to remove tap0 interface"
+    fi
+  fi
+  
+  echo -e "\033[0;32m[+]\033[0m Cleanup completed"
+}
+trap cleanup EXIT
+
 # Print ASCII art at the beginning
 echo "                                                    "
 echo "     ███████╗███████╗██╗   ██╗███╗   ██╗██╗   ██╗██████╗ "
@@ -49,19 +85,17 @@ if [ ! -d "$squashfs_root_path" ]; then
   echo -e "\033[0;31m[x]\033[0m The provided path is not a directory."
   print_help
 fi
-sudo chmod 777 $squashfs_root_path/lib/* 2>&1
-sudo chmod 777 $squashfs_root_path/bin/* 2>&1
-sudo chmod 777 $squashfs_root_path/sbin/* 2>&1
-sudo chmod 777 $squashfs_root_path/usr/lib/* 2>&1
-sudo chmod 777 $squashfs_root_path/usr/bin/* 2>&1
-sudo chmod 777 $squashfs_root_path/usr/sbin/* 2>&1
+sudo chmod -R 777 "$squashfs_root_path/lib" 2>/dev/null
+sudo chmod -R 777 "$squashfs_root_path/bin" 2>/dev/null
+sudo chmod -R 777 "$squashfs_root_path/sbin" 2>/dev/null
+sudo chmod -R 777 "$squashfs_root_path/usr/lib" 2>/dev/null
+sudo chmod -R 777 "$squashfs_root_path/usr/bin" 2>/dev/null
+sudo chmod -R 777 "$squashfs_root_path/usr/sbin" 2>/dev/null
 # Initial log file
 mkdir -p log
 qemu_log="./log/qemu.log"
 tar_log="./log/tar.log"
-touch ./log/qemu.log
-touch ./log/tar.log
-touch ./log/http.log
+touch "$qemu_log" "$tar_log" "$http_log"
 
 # Check if vmlinuz and debian images exist
 echo "                                                    "
@@ -134,10 +168,16 @@ echo "                                                    "
 folder_name=$(basename "$squashfs_root_path")
 
 # Config ip address for tap0 and http server for download squashfs-root.tar.gz
-echo -e "[o] config ip address for tap0 and http server..."
-sudo tunctl -t tap0 -u $(whoami)
-sudo ip tuntap add mode tap user $(whoami) name tap0
-sudo ip addr add 10.10.10.1/24 dev tap0
+echo -e "[o] Configuring tap0 interface and HTTP server..."
+sudo tunctl -t tap0 -u $(whoami) || {
+  echo -e "\033[0;31m[x]\033[0m Failed to create tap0 interface."
+  exit 1
+}
+sudo ip tuntap add mode tap user $(whoami) name tap0 2>/dev/null || true
+sudo ip addr add 10.10.10.1/24 dev tap0 || {
+  echo -e "\033[0;31m[x]\033[0m Failed to add IP address to tap0."
+  exit 1
+}
 sudo ip link set dev tap0 up
 ip addr show tap0
 
@@ -184,26 +224,34 @@ echo -e "[o] input:'ping 10.10.10.1' to test if the connection is successful."
 echo -e "[o] input:'wget http://10.10.10.1:8000/load_in_mips.sh' to download script."
 echo -e "[o] input:'sh load_in_mips.sh' to finish all the work."
 echo "                                                    "
-if [ "$arch" == "mips" ]; then
-  sudo qemu-system-mips -M malta \
-    -kernel ./img/vmlinux-3.2.0-4-4kc-malta-be \
-    -hda ./img/debian_wheezy_mips_standard.qcow2 \
-    -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 -s -nographic
-elif [ "$arch" == "armel" ]; then
-  sudo qemu-system-arm -M versatilepb -nographic \
-    -kernel ./img/vmlinuz-3.2.0-4-versatile \
-    -initrd ./img/initrd.img-3.2.0-4-versatile \
-    -hda ./img/debian_wheezy_armel_standard.qcow2 \
-    -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 -s
-elif [ "$arch" == "armhf" ]; then
-  # 启动 qemu-system-arm
-  sudo qemu-system-arm -M vexpress-a9 -nographic \
-    -kernel ./img/vmlinuz-3.2.0-4-vexpress \
-    -initrd ./img/initrd.img-3.2.0-4-vexpress \
-    -drive if=sd,file=./img/debian_wheezy_armhf_standard.qcow2 \
-    -append "root=/dev/mmcblk0p2 console=tty0" -net nic -net tap,ifname=tap0 -s
-else
-  sudo qemu-system-mipsel -M malta \
-    -kernel ./img/vmlinux-3.2.0-4-4kc-malta -hda ./img/debian_wheezy_mipsel_standard.qcow2 \
-    -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 -s -nographic
-fi
+case "$arch" in
+  "mips")
+    sudo qemu-system-mips -M malta \
+      -kernel ./img/vmlinux-3.2.0-4-4kc-malta-be \
+      -hda ./img/debian_wheezy_mips_standard.qcow2 \
+      -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 -s -nographic
+    ;;
+    
+  "armel")
+    sudo qemu-system-arm -M versatilepb -nographic \
+      -kernel ./img/vmlinuz-3.2.0-4-versatile \
+      -initrd ./img/initrd.img-3.2.0-4-versatile \
+      -hda ./img/debian_wheezy_armel_standard.qcow2 \
+      -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 -s
+    ;;
+    
+  "armhf")
+    sudo qemu-system-arm -M vexpress-a9 -nographic \
+      -kernel ./img/vmlinuz-3.2.0-4-vexpress \
+      -initrd ./img/initrd.img-3.2.0-4-vexpress \
+      -drive if=sd,file=./img/debian_wheezy_armhf_standard.qcow2 \
+      -append "root=/dev/mmcblk0p2 console=tty0" -net nic -net tap,ifname=tap0 -s
+    ;;
+    
+  *)
+    sudo qemu-system-mipsel -M malta \
+      -kernel ./img/vmlinux-3.2.0-4-4kc-malta \
+      -hda ./img/debian_wheezy_mipsel_standard.qcow2 \
+      -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 -s -nographic
+    ;;
+esac
