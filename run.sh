@@ -4,10 +4,10 @@
 cleanup() {
   echo -e "\n\033[0;33m[!]\033[0m Cleaning up resources..."
   # Stop the HTTP server if it's running
-  if pgrep -f "python3 -m http.server" > /dev/null; then
+  if pgrep -f "python3 -m http.server" >/dev/null; then
     echo -e "[o] Stopping HTTP server on port 8000..."
     sudo fuser -k 8000/tcp 2>/dev/null
-    if pgrep -f "python3 -m http.server" > /dev/null; then
+    if pgrep -f "python3 -m http.server" >/dev/null; then
       echo -e "\033[0;31m[x]\033[0m Failed to stop HTTP server"
     else
       echo -e "\033[0;32m[+]\033[0m HTTP server stopped successfully"
@@ -19,7 +19,7 @@ cleanup() {
     sudo mv /etc/qemu-ifup.bak /etc/qemu-ifup
     echo -e "\033[0;32m[+]\033[0m Original QEMU network script restored"
   fi
-  
+
   # Remove the tap0 network interface
   if ip link show tap0 &>/dev/null; then
     echo -e "[o] Removing tap0 network interface..."
@@ -31,7 +31,7 @@ cleanup() {
       echo -e "\033[0;31m[x]\033[0m Failed to remove tap0 interface"
     fi
   fi
-  
+
   echo -e "\033[0;32m[+]\033[0m Cleanup completed"
 }
 trap cleanup EXIT
@@ -45,7 +45,7 @@ echo "     ╚════██║██╔══╝  ╚██╗ ██╔╝
 echo "     ███████║███████╗ ╚████╔╝ ██║ ╚████║╚██████╔╝██║     "
 echo "     ╚══════╝╚══════╝  ╚═══╝  ╚═╝  ╚═══╝ ╚═════╝ ╚═╝     "
 echo "                                                    "
-echo "     Welcome to Sevnup firmware analysis script for MIPSel "
+echo "     Welcome to Sevnup firmware analysis script for MIPS/ARM "
 echo "   By N1nEmAn - https://github.com/N1nEmAn/Sevnup"
 echo "                                                    "
 
@@ -95,6 +95,7 @@ sudo chmod -R 777 "$squashfs_root_path/usr/sbin" 2>/dev/null
 mkdir -p log
 qemu_log="./log/qemu.log"
 tar_log="./log/tar.log"
+http_log="./log/http.log"
 touch "$qemu_log" "$tar_log" "$http_log"
 
 # Check if vmlinuz and debian images exist
@@ -169,14 +170,18 @@ folder_name=$(basename "$squashfs_root_path")
 
 # Config ip address for tap0 and http server for download squashfs-root.tar.gz
 echo -e "[o] Configuring tap0 interface and HTTP server..."
-sudo tunctl -t tap0 -u $(whoami) || {
+sudo tunctl -t tap0 -u $(whoami) 2>/dev/null || sudo ip tuntap add mode tap user $(whoami) name tap0 2>/dev/null
+ip link show tap0 &>/dev/null || {
   echo -e "\033[0;31m[x]\033[0m Failed to create tap0 interface."
   exit 1
 }
-sudo ip tuntap add mode tap user $(whoami) name tap0 2>/dev/null || true
-sudo ip addr add 10.10.10.1/24 dev tap0 || {
-  echo -e "\033[0;31m[x]\033[0m Failed to add IP address to tap0."
-  exit 1
+
+ip addr show tap0 | grep -q "10.10.10.1/24" || {
+  # 如果没有 IP，则添加 IP
+  sudo ip addr add 10.10.10.1/24 dev tap0 || {
+    echo -e "\033[0;31m[x]\033[0m Failed to add IP address to tap0."
+    exit 1
+  }
 }
 sudo ip link set dev tap0 up
 ip addr show tap0
@@ -225,33 +230,33 @@ echo -e "[o] input:'wget http://10.10.10.1:8000/load_in_mips.sh' to download scr
 echo -e "[o] input:'sh load_in_mips.sh' to finish all the work."
 echo "                                                    "
 case "$arch" in
-  "mips")
-    sudo qemu-system-mips -M malta \
-      -kernel ./img/vmlinux-3.2.0-4-4kc-malta-be \
-      -hda ./img/debian_wheezy_mips_standard.qcow2 \
-      -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 -s -nographic
-    ;;
-    
-  "armel")
-    sudo qemu-system-arm -M versatilepb -nographic \
-      -kernel ./img/vmlinuz-3.2.0-4-versatile \
-      -initrd ./img/initrd.img-3.2.0-4-versatile \
-      -hda ./img/debian_wheezy_armel_standard.qcow2 \
-      -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 -s
-    ;;
-    
-  "armhf")
-    sudo qemu-system-arm -M vexpress-a9 -nographic \
-      -kernel ./img/vmlinuz-3.2.0-4-vexpress \
-      -initrd ./img/initrd.img-3.2.0-4-vexpress \
-      -drive if=sd,file=./img/debian_wheezy_armhf_standard.qcow2 \
-      -append "root=/dev/mmcblk0p2 console=tty0" -net nic -net tap,ifname=tap0 -s
-    ;;
-    
-  *)
-    sudo qemu-system-mipsel -M malta \
-      -kernel ./img/vmlinux-3.2.0-4-4kc-malta \
-      -hda ./img/debian_wheezy_mipsel_standard.qcow2 \
-      -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 -s -nographic
-    ;;
+"mips")
+  sudo qemu-system-mips -M malta \
+    -kernel ./img/vmlinux-3.2.0-4-4kc-malta-be \
+    -hda ./img/debian_wheezy_mips_standard.qcow2 \
+    -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 -s -nographic
+  ;;
+
+"armel")
+  sudo qemu-system-arm -M versatilepb -nographic \
+    -kernel ./img/vmlinuz-3.2.0-4-versatile \
+    -initrd ./img/initrd.img-3.2.0-4-versatile \
+    -hda ./img/debian_wheezy_armel_standard.qcow2 \
+    -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 -s
+  ;;
+
+"armhf")
+  sudo qemu-system-arm -M vexpress-a9 -nographic \
+    -kernel ./img/vmlinuz-3.2.0-4-vexpress \
+    -initrd ./img/initrd.img-3.2.0-4-vexpress \
+    -drive if=sd,file=./img/debian_wheezy_armhf_standard.qcow2 \
+    -append "root=/dev/mmcblk0p2 console=tty0" -net nic -net tap,ifname=tap0 -s
+  ;;
+
+*)
+  sudo qemu-system-mipsel -M malta \
+    -kernel ./img/vmlinux-3.2.0-4-4kc-malta \
+    -hda ./img/debian_wheezy_mipsel_standard.qcow2 \
+    -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 -s -nographic
+  ;;
 esac
