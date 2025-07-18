@@ -219,13 +219,13 @@ EOF
 
 sudo chmod +x /etc/qemu-ifup
 
-# Run qemu-system with nohup and redirect output to log/output.log
+# Run qemu-system with nohup and redirect output to log/qemu.log
 cp ./load_in_mips.sh "$squashfs_root_path/../"
 cp ./bridge.sh "$squashfs_root_path/../"
 echo -e "\033[0;32m[+]\033[0m now qemu-system-${arch} is running!"
 echo -e "[o] in ${arch}, use username 'root' and password 'root' to login."
 echo -e "[o] input:'ifconfig eth0 10.10.10.2/24' to config ip address."
-echo -e "[o] input:'ping 10.10.10.1' to test if the connection is successful."
+echo -e "[o] input:'ping -c 4 10.10.10.1' to test if the connection is successful."
 echo -e "[o] input:'wget http://10.10.10.1:8000/load_in_mips.sh' to download script."
 echo -e "[o] input:'sh load_in_mips.sh' to finish all the work."
 echo "                                                    "
@@ -234,7 +234,8 @@ case "$arch" in
   sudo qemu-system-mips -M malta \
     -kernel ./img/vmlinux-3.2.0-4-4kc-malta-be \
     -hda ./img/debian_wheezy_mips_standard.qcow2 \
-    -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 -s -nographic
+    -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 -s -nographic \
+    2>&1 | tee -a "$qemu_log"
   ;;
 
 "armel")
@@ -242,7 +243,8 @@ case "$arch" in
     -kernel ./img/vmlinuz-3.2.0-4-versatile \
     -initrd ./img/initrd.img-3.2.0-4-versatile \
     -hda ./img/debian_wheezy_armel_standard.qcow2 \
-    -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 -s
+    -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 -s \
+    2>&1 | tee -a "$qemu_log"
   ;;
 
 "armhf")
@@ -250,13 +252,15 @@ case "$arch" in
     -kernel ./img/vmlinuz-3.2.0-4-vexpress \
     -initrd ./img/initrd.img-3.2.0-4-vexpress \
     -drive if=sd,file=./img/debian_wheezy_armhf_standard.qcow2 \
-    -append "root=/dev/mmcblk0p2 console=tty0" -net nic -net tap,ifname=tap0 -s
+    -append "root=/dev/mmcblk0p2 console=tty0" -net nic -net tap,ifname=tap0 -s \
+    2>&1 | tee -a "$qemu_log"
   ;;
 
 *)
   sudo qemu-system-mipsel -M malta \
     -kernel ./img/vmlinux-3.2.0-4-4kc-malta \
     -hda ./img/debian_wheezy_mipsel_standard.qcow2 \
-    -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 -s -nographic
+    -append "root=/dev/sda1 console=tty0" -net nic -net tap,ifname=tap0 -s -nographic \
+    2>&1 | tee -a "$qemu_log"
   ;;
 esac
